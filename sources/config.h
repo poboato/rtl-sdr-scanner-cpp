@@ -17,7 +17,10 @@ constexpr auto TRANSMISSION_MAX_TIME = std::chrono::minutes(10);          // bre
 
 // SCANNING SETTINGS
 constexpr auto NOISE_LEARNING_TIME = std::chrono::milliseconds(2000);  // noise learnig time
-constexpr auto RANGE_SCANNING_TIME = std::chrono::milliseconds(500);   // waiting time for transmission in single scanning range
+// RANGE_SCANNING_TIME (per-range dwell) and the post-retune settle sleep used to be hardcoded
+// here and in SdrDevice::setFrequencyRange respectively -- moved to ScanningConfig (T-132) so
+// they're tunable via config.json without a rebuild. See Config::rangeScanningTime() /
+// Config::retuneSettleTime() below.
 
 // SIGNAL DETECTION SETTINGS
 constexpr auto GROUPING_X = 21;                    // average n frames in frequency domain
@@ -59,6 +62,8 @@ class Config {
   std::chrono::milliseconds recordingMinTime() const;
   std::chrono::milliseconds recordingTimeout() const;
   Frequency recordingTuningStep() const;
+  std::chrono::milliseconds rangeScanningTime() const;
+  std::chrono::milliseconds retuneSettleTime() const;
 
   std::string mqttUrl() const;
   std::string mqttUsername() const;

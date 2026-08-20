@@ -20,6 +20,7 @@ class Scanner {
   void runScheduler(const std::optional<FrequencyRange>& activeRange);
   void worker();
 
+  const Config& m_config;
   const std::vector<FrequencyRange> m_ranges;
   SdrDevice m_device;
   Scheduler m_scheduler;
