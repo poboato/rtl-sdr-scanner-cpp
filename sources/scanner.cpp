@@ -7,7 +7,8 @@ constexpr auto LABEL = "scanner";
 constexpr auto LOOP_TIMEOUT = std::chrono::milliseconds(10);
 
 Scanner::Scanner(const Config& config, const Device& device, RemoteController& remoteController)
-    : m_ranges(splitRanges(device.ranges, getRangeSplitSampleRate(device.sample_rate))),
+    : m_config(config),
+      m_ranges(splitRanges(device.ranges, getRangeSplitSampleRate(device.sample_rate))),
       m_device(config, device, remoteController, m_notification, m_ranges),
       m_scheduler(config, device, remoteController),
       m_isRunning(true),
@@ -82,7 +83,7 @@ void Scanner::worker() {
 
         const auto startScanningTime = getTime();
         bool isRecording = true;
-        while ((getTime() <= startScanningTime + RANGE_SCANNING_TIME || isRecording) && m_isRunning) {
+        while ((getTime() <= startScanningTime + m_config.rangeScanningTime() || isRecording) && m_isRunning) {
           runScheduler(range);
           const auto notification = m_notification.wait();
           isRecording = !notification.empty();

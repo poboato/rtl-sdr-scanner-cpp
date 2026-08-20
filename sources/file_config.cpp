@@ -10,6 +10,13 @@ constexpr auto LABEL = "file_config";
 
 FileConfig FileConfig::fromJson(nlohmann::json json, bool enumerateRemote) {
   ConfigMigrator::update(json);
+  // "scanning" is new (T-132). NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE throws on a missing key, so an
+  // existing config.json written before this field existed would otherwise fail to load entirely.
+  // Backfill it with ScanningConfig's own defaults -- which match the values that were previously
+  // hardcoded constants -- so a config with no "scanning" key parses exactly as before.
+  if (!json.contains("scanning")) {
+    json["scanning"] = ScanningConfig{};
+  }
   FileConfig fileConfig(json);
   SdrDeviceReader::updateDevices(fileConfig.devices, enumerateRemote);
   return fileConfig;

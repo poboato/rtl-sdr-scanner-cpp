@@ -78,7 +78,7 @@ void SdrDevice::setFrequencyRange(FrequencyRange frequencyRange) {
   } else {
     Logger::warn(LABEL, "set frequency range failed: {}, center frequency: {}", formatFrequencyRange(frequencyRange), formatFrequency(frequency));
   }
-  std::this_thread::sleep_for(std::chrono::milliseconds(1));
+  std::this_thread::sleep_for(m_config.retuneSettleTime());
   auto it = m_processorIndex.find(frequencyRange.center());
   if (it != m_processorIndex.end()) {
     m_selector->set_output_index(it->second);

@@ -51,6 +51,8 @@ Frequency Config::recordingBandwidth() const { return m_fileConfig.recording.min
 std::chrono::milliseconds Config::recordingMinTime() const { return m_fileConfig.recording.min_time_ms; }
 std::chrono::milliseconds Config::recordingTimeout() const { return m_fileConfig.recording.max_noise_time_ms; }
 Frequency Config::recordingTuningStep() const { return m_fileConfig.recording.step; }
+std::chrono::milliseconds Config::rangeScanningTime() const { return m_fileConfig.scanning.range_scanning_time_ms; }
+std::chrono::milliseconds Config::retuneSettleTime() const { return m_fileConfig.scanning.retune_settle_time_ms; }
 
 std::string Config::mqttUrl() const { return m_argConfig.mqttUrl; }
 std::string Config::mqttUsername() const { return m_argConfig.mqttUser; }
